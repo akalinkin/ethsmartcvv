@@ -33,7 +33,7 @@ contract ValueOwners is OwnedMortal {
     // Returns balance of defined account address
     /// @param account Address of account
     /// @return balance Value payed from defined address
-    function getBalance(address account) public isContractOwner() returns (uint balance) {
+    function getBalance(address account) constant public isContractOwner() returns (uint balance) {
         return ownersPayments[account];
     }
 
@@ -50,5 +50,10 @@ contract ValueOwners is OwnedMortal {
         }
         ownersPayments[msg.sender] = msg.value;
         return true;
+    }
+
+    // Returns amount of user payment
+    function payedAmount() constant public returns(uint amount) {
+      return ownersPayments[msg.sender];
     }
 }
