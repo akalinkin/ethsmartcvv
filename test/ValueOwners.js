@@ -31,8 +31,15 @@ contract('ValueOwners', function(accounts) {
     return ValueOwners.deployed().then(function(instance) {
       return instance.setCost.call(15000000000000000);
     }).then(function(newCost) {
-      assert.equal(newCost, 15000000000000000, 'New cost doesn\' eqals new value 15000000000000000');
+      assert.equal(newCost, 15000000000000000, 'New cost doesn\' equals new value 15000000000000000');
     });
   });
 
+  it("should return zero from payedAmount", function() {
+    return ValueOwners.deployed().then(function(instance) {
+      return instance.payedAmount.call();
+    }).then(function(amount) {
+      assert.equal(amount, 0,'Amount isn\'t 0')
+    });
+  });
 });
