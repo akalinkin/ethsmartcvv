@@ -5,7 +5,7 @@ import Web3 from 'web3';
 
 var ETH_CLIENT;
 
-var ValueOwnersContractAddress = '0xa7d86f9aebc843004fa29876d6b37c9f247d1af4';
+var ValueOwnersContractAddress = '0xe71455506b9e94d3476290963784a2522aebaf97';
 var ValueOwnersContract;
 var ValueOwnersContractAbi = [{"constant":true,"inputs":[],"name":"cost","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[],"name":"kill","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"value","type":"uint256"}],"name":"setCost","outputs":[{"name":"newCost","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[],"name":"buyValue","outputs":[{"name":"success","type":"bool"}],"payable":true,"type":"function"},{"constant":true,"inputs":[],"name":"payedAmount","outputs":[{"name":"amount","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"balance","type":"uint256"}],"payable":false,"type":"function"},{"inputs":[],"payable":false,"type":"constructor"},{"payable":false,"type":"fallback"}]
 var userAccount;
@@ -14,6 +14,7 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      isTestNet: false,
       costInEther: 0,
       payedAmount: 0,
       defaultAccount: "n/a",
@@ -33,11 +34,12 @@ class App extends Component {
       ETH_CLIENT.eth.defaultAccount = ETH_CLIENT.eth.accounts[0];
       userAccount = ETH_CLIENT.eth.accounts[0];
     } else {
+      this.setState("isTestNet": true);
       console.log('No web3? You should consider trying MetaMask!')
       // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
       window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
       ETH_CLIENT = window.web3;
-      ETH_CLIENT.eth.defaultAccount = '0x1b7e1a1bc69d6652ed3a7805c21c9420dc7a1783';
+      ETH_CLIENT.eth.defaultAccount = '0xe40dda638eca59f931de8ee0b35adcce20d7b87c';
     }
 
     ValueOwnersContract = ETH_CLIENT.eth.contract(ValueOwnersContractAbi).at(ValueOwnersContractAddress);
@@ -117,22 +119,21 @@ class App extends Component {
 
   render() {
     const isPayed = (this.state.payedAmount > 0) ? true : false;
-
+    var isTestNet = this.state.isTestNet;
     return (
       <div className="App">
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h2>DApp for EthSmartCvv contract</h2>
+          <h2>Get my CV</h2>
         </div>
         <div className="App-intro">
           <br />
-          <strong>Current value cost: {this.state.costInEther} Ether</strong>
-          <hr />
-          Your current account: {this.state.defaultAccount}<br />
+          <p>Current CV access cost id <strong>{this.state.costInEther}</strong> Ether</p>
+
 
           {isPayed ? (
             <div>
-              <h1>Payed</h1>
+              <h1>Successfully payed</h1>
               You already payed: {this.state.payedAmount} Eth
             </div>
           ) : (
@@ -144,6 +145,16 @@ class App extends Component {
               <button onClick={this.pay.bind(this)}>Pay</button>
             </div>
           )}
+
+          <hr />
+          <h4>Addintional info:</h4>
+          {isTestNet ? (
+            <div class="text-warning">No web3? You should consider trying MetaMask!</div>
+          ) : (
+            <div class="text-success">Mist Metamask detected. Congrats - you are connected to blockchain!</div>
+          )}
+          <br />
+          Your current account: {this.state.defaultAccount}
         </div>
       </div>
     );
