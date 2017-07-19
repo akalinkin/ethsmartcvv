@@ -49,6 +49,19 @@ class App extends Component {
       this.refreshAccountHandler();
 
       setInterval(this.refreshAccount, 300);
+
+      // ETH_CLIENT.eth.filter('latest', function(error, result){
+      //   if (!error) {
+      //     console.log('Filter:latest');
+      //     var curAmount = this.state.payedAmount;
+      //     this.refreshPayedAmount();
+      //     var newAmount = this.state.payedAmount;
+      //
+      //     console.log("prevAmount:", curAmount, "newAmount", newAmount);
+      //   } else {
+      //     console.error(error)
+      //   }
+      // });
     }
   }
 
@@ -88,25 +101,25 @@ class App extends Component {
       (error,result) => {
         if(!error) {
           this.refreshPayedAmount();
-          // TODO: Send success message
+          // TODO: Show: Your transaction sended
+          // TODO: Whait for transaction block mined event
+          // TODO: Refresh payedAmount() and show success message
           console.log('Pay success:', result);
+          //console.log('tx',tx);
         }
         else {
           // TODO: Send error message
           // TODO: Process Tx Signature (UserDenied, etc)
-          console.error('Pay error', error);
+          console.log('Pay error', error);
         }
       }
     );
-    //console.log('tx',tx);
   }
-
 
   render() {
     const isPayed = (this.state.payedAmount > 0) ? true : false;
     const isWeb3 = this.state.isWeb3;
-    console.log(isWeb3);
-    console.log(isPayed);
+    //console.log(isWeb3, isPayed);
 
     var payedPartial;
     if (isPayed) {
