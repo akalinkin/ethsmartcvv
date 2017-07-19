@@ -62,6 +62,8 @@ class App extends Component {
       //     console.error(error)
       //   }
       // });
+
+      // Note: you will probably want to .stopWatching at some point (probably in componentWillUnmount())
     }
   }
 
